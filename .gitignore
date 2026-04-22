@@ -1,0 +1,7 @@
+data/
+*.db
+picprism
+picprism.exe
+web/node_modules/
+web/dist/
+.env

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PicPrism · UI Mockup</title>
+<style>
+  :root {
+    --bg: #fafafa;
+    --surface: #ffffff;
+    --border: #e5e5e5;
+    --text: #171717;
+    --muted: #737373;
+    --accent: #171717;
+    --accent-hover: #404040;
+    --tag-bg: #f5f5f5;
+    --tag-text: #525252;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --radius: 8px;
+  }
+  [data-theme="dark"] {
+    --bg: #0a0a0a;
+    --surface: #171717;
+    --border: #262626;
+    --text: #fafafa;
+    --muted: #737373;
+    --accent: #e5e5e5;
+    --accent-hover: #d4d4d4;
+    --tag-bg: #262626;
+    --tag-text: #a3a3a3;
+    --shadow: 0 1px 3px rgba(0,0,0,0.4);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.5;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 52px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo {
+    font-size: 15px; font-weight: 600; letter-spacing: -0.3px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .logo-icon {
+    width: 26px; height: 26px;
+    background: var(--text);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-icon svg { fill: var(--bg); }
+  .nav-actions { display: flex; align-items: center; gap: 8px; }
+  .btn {
+    height: 32px; padding: 0 14px;
+    border-radius: 6px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--text);
+    font-size: 13px; cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+    transition: background 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+  .btn:hover { background: var(--tag-bg); }
+  .btn-primary {
+    background: var(--text); color: var(--bg);
+    border-color: var(--text);
+  }
+  .btn-primary:hover { opacity: 0.85; background: var(--text); }
+  .theme-btn {
+    width: 32px; height: 32px; padding: 0;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 6px; border: 1px solid var(--border);
+    background: var(--surface); cursor: pointer;
+    color: var(--muted);
+    transition: background 0.15s;
+  }
+  .theme-btn:hover { background: var(--tag-bg); color: var(--text); }
+
+  /* LAYOUT */
+  .container { display: flex; height: calc(100vh - 52px); }
+
+  /* SIDEBAR */
+  aside {
+    width: 200px; flex-shrink: 0;
+    border-right: 1px solid var(--border);
+    padding: 16px 12px;
+    display: flex; flex-direction: column; gap: 4px;
+    overflow-y: auto;
+  }
+  .sidebar-section { font-size: 11px; color: var(--muted); font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    padding: 8px 8px 4px; }
+  .sidebar-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 8px; border-radius: 6px;
+    font-size: 13px; cursor: pointer; color: var(--text);
+    transition: background 0.1s;
+  }
+  .sidebar-item:hover { background: var(--tag-bg); }
+  .sidebar-item.active { background: var(--tag-bg); font-weight: 500; }
+  .sidebar-item svg { color: var(--muted); flex-shrink: 0; }
+  .sidebar-item.active svg { color: var(--text); }
+  .tag-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--muted); flex-shrink: 0;
+  }
+  .count {
+    margin-left: auto; font-size: 11px; color: var(--muted);
+    background: var(--tag-bg); padding: 1px 6px; border-radius: 10px;
+  }
+
+  /* MAIN */
+  main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+
+  /* TOOLBAR */
+  .toolbar {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+    background: var(--surface);
+    position: sticky; top: 0; z-index: 10;
+  }
+  .search-wrap {
+    flex: 1; max-width: 320px;
+    position: relative; display: flex; align-items: center;
+  }
+  .search-wrap svg { position: absolute; left: 10px; color: var(--muted); pointer-events: none; }
+  .search-input {
+    width: 100%; height: 32px;
+    border: 1px solid var(--border); border-radius: 6px;
+    background: var(--bg); color: var(--text);
+    font-size: 13px; padding: 0 10px 0 32px;
+    outline: none; transition: border-color 0.15s;
+  }
+  .search-input:focus { border-color: var(--muted); }
+  .search-input::placeholder { color: var(--muted); }
+  .sort-select {
+    height: 32px; padding: 0 10px;
+    border: 1px solid var(--border); border-radius: 6px;
+    background: var(--surface); color: var(--text);
+    font-size: 13px; outline: none; cursor: pointer;
+  }
+  .view-toggle { display: flex; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+  .view-btn {
+    width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+    border: none; background: var(--surface); color: var(--muted); cursor: pointer;
+    transition: background 0.1s;
+  }
+  .view-btn.active { background: var(--tag-bg); color: var(--text); }
+  .view-btn:hover { background: var(--tag-bg); }
+  .spacer { flex: 1; }
+  .stat-label { font-size: 12px; color: var(--muted); }
+
+  /* GRID */
+  .grid-area { padding: 16px 20px; }
+  .image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+  }
+  .image-card {
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    overflow: hidden;
+    cursor: pointer;
+    transition: box-shadow 0.15s, border-color 0.15s;
+    box-shadow: var(--shadow);
+  }
+  .image-card:hover { box-shadow: var(--shadow-md); border-color: var(--muted); }
+  .image-card:hover .card-overlay { opacity: 1; }
+  .card-thumb {
+    width: 100%; aspect-ratio: 1;
+    position: relative; overflow: hidden;
+    background: var(--tag-bg);
+  }
+  .card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .card-overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    opacity: 0; transition: opacity 0.15s;
+  }
+  .overlay-btn {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+    color: white; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; backdrop-filter: blur(4px);
+    transition: background 0.1s;
+  }
+  .overlay-btn:hover { background: rgba(255,255,255,0.3); }
+  .card-info { padding: 8px 10px; }
+  .card-name { font-size: 12px; font-weight: 500; truncate: true;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .card-tags { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
+  .tag {
+    font-size: 11px; padding: 1px 7px; border-radius: 10px;
+    background: var(--tag-bg); color: var(--tag-text);
+    border: 1px solid var(--border);
+  }
+
+  /* UPLOAD ZONE */
+  .upload-zone {
+    margin: 0 20px 16px;
+    border: 1.5px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .upload-zone:hover { border-color: var(--muted); background: var(--tag-bg); }
+
+  /* DETAIL PANEL (right side) */
+  .detail-panel {
+    width: 280px; flex-shrink: 0;
+    border-left: 1px solid var(--border);
+    padding: 20px 16px;
+    overflow-y: auto;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .panel-thumb {
+    width: 100%; border-radius: var(--radius);
+    background: var(--tag-bg); aspect-ratio: 4/3;
+    overflow: hidden;
+  }
+  .panel-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .panel-section { display: flex; flex-direction: column; gap: 6px; }
+  .panel-label { font-size: 11px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.4px; }
+  .meta-row { display: flex; justify-content: space-between; font-size: 12px; }
+  .meta-key { color: var(--muted); }
+  .link-box {
+    background: var(--tag-bg); border: 1px solid var(--border);
+    border-radius: 6px; padding: 8px 10px;
+    font-size: 11px; font-family: monospace;
+    color: var(--muted); word-break: break-all;
+    position: relative;
+    cursor: pointer;
+  }
+  .link-box:hover { border-color: var(--muted); }
+  .link-label { font-size: 10px; color: var(--muted); margin-bottom: 4px;
+    font-family: -apple-system, sans-serif; font-weight: 500; text-transform: uppercase; letter-spacing: 0.4px; }
+  .link-value { font-size: 12px; color: var(--text); word-break: break-all; }
+  .copy-hint { font-size: 10px; color: var(--muted); text-align: right; margin-top: 2px; }
+  .panel-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .panel-actions { display: flex; gap: 8px; }
+  .panel-actions .btn { flex: 1; justify-content: center; font-size: 12px; }
+  .btn-danger { color: #ef4444; border-color: var(--border); }
+  .btn-danger:hover { background: #fef2f2; border-color: #fca5a5; }
+  [data-theme="dark"] .btn-danger:hover { background: #1c0a0a; border-color: #7f1d1d; }
+
+  /* PLACEHOLDER images */
+  .ph { background: var(--tag-bg); display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+  .ph svg { opacity: 0.2; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <div class="logo-icon">
+      <svg width="14" height="14" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+    </div>
+    PicPrism
+  </div>
+  <div class="nav-actions">
+    <button class="btn btn-primary" onclick="showUpload()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      上传图片
+    </button>
+    <button class="theme-btn" onclick="toggleTheme()" title="切换主题">
+      <svg id="theme-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </button>
+  </div>
+</nav>
+
+<div class="container">
+  <!-- Sidebar -->
+  <aside>
+    <div class="sidebar-section">浏览</div>
+    <div class="sidebar-item active">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      全部图片
+      <span class="count">128</span>
+    </div>
+    <div class="sidebar-item">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      最近上传
+    </div>
+
+    <div class="sidebar-section" style="margin-top:8px">标签</div>
+    <div class="sidebar-item">
+      <div class="tag-dot" style="background:#6366f1"></div>
+      博客配图
+      <span class="count">42</span>
+    </div>
+    <div class="sidebar-item">
+      <div class="tag-dot" style="background:#f59e0b"></div>
+      产品截图
+      <span class="count">31</span>
+    </div>
+    <div class="sidebar-item">
+      <div class="tag-dot" style="background:#10b981"></div>
+      头像
+      <span class="count">8</span>
+    </div>
+    <div class="sidebar-item">
+      <div class="tag-dot" style="background:#ef4444"></div>
+      Banner
+      <span class="count">15</span>
+    </div>
+    <div class="sidebar-item">
+      <div class="tag-dot" style="background:#8b5cf6"></div>
+      图标
+      <span class="count">32</span>
+    </div>
+    <div class="sidebar-item" style="color:var(--muted); font-size:12px; padding-left:16px">
+      + 新建标签
+    </div>
+
+    <div style="flex:1"></div>
+    <div class="sidebar-item" style="margin-top:8px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      设置
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main id="main-view">
+    <div class="toolbar">
+      <div class="search-wrap">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input class="search-input" type="text" placeholder="搜索图片名称、标签…">
+      </div>
+      <select class="sort-select">
+        <option>最新上传</option>
+        <option>最早上传</option>
+        <option>文件名</option>
+        <option>文件大小</option>
+      </select>
+      <div class="spacer"></div>
+      <span class="stat-label">128 张图片 · 2.4 GB</span>
+      <div class="view-toggle">
+        <button class="view-btn active" title="网格视图">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        </button>
+        <button class="view-btn" title="列表视图">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Upload zone -->
+    <div class="upload-zone" id="upload-zone">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      拖拽图片到此处，或点击选择文件 · 支持 JPEG / PNG / GIF / WebP / AVIF / SVG
+    </div>
+
+    <div class="grid-area">
+      <div class="image-grid" id="image-grid">
+        <!-- Cards generated by JS -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Detail Panel -->
+  <div class="detail-panel" id="detail-panel">
+    <div class="panel-thumb">
+      <div class="ph" style="aspect-ratio:4/3">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--muted);text-align:center">点击图片查看详情</div>
+  </div>
+</div>
+
+<!-- Detail Panel content template (hidden) -->
+<template id="detail-tpl">
+  <div class="panel-thumb">
+    <img src="" alt="" id="dp-img">
+  </div>
+  <div class="panel-section">
+    <div class="panel-label">信息</div>
+    <div class="meta-row"><span class="meta-key">文件名</span><span>banner-2024.png</span></div>
+    <div class="meta-row"><span class="meta-key">尺寸</span><span>1920 × 1080</span></div>
+    <div class="meta-row"><span class="meta-key">大小</span><span>342 KB</span></div>
+    <div class="meta-row"><span class="meta-key">格式</span><span>PNG → WebP</span></div>
+    <div class="meta-row"><span class="meta-key">上传时间</span><span>2026-04-22</span></div>
+  </div>
+  <div class="panel-section">
+    <div class="panel-label">标签</div>
+    <div class="panel-tags">
+      <span class="tag">博客配图</span>
+      <span class="tag">Banner</span>
+      <span class="tag" style="border-style:dashed;cursor:pointer">+ 添加</span>
+    </div>
+  </div>
+  <div class="panel-section">
+    <div class="panel-label">复制链接</div>
+    <div class="link-box" onclick="copyLink(this)">
+      <div class="link-label">直链 (WebP)</div>
+      <div class="link-value">https://img.example.com/i/abc123.webp</div>
+      <div class="copy-hint">点击复制</div>
+    </div>
+    <div class="link-box" onclick="copyLink(this)">
+      <div class="link-label">Markdown</div>
+      <div class="link-value">![banner-2024](https://img.example.com/i/abc123.webp)</div>
+      <div class="copy-hint">点击复制</div>
+    </div>
+    <div class="link-box" onclick="copyLink(this)">
+      <div class="link-label">HTML</div>
+      <div class="link-value">&lt;img src="https://img.example.com/i/abc123.webp" alt="banner-2024"&gt;</div>
+      <div class="copy-hint">点击复制</div>
+    </div>
+    <div class="link-box" onclick="copyLink(this)">
+      <div class="link-label">BBCode</div>
+      <div class="link-value">[img]https://img.example.com/i/abc123.webp[/img]</div>
+      <div class="copy-hint">点击复制</div>
+    </div>
+  </div>
+  <div class="panel-actions">
+    <button class="btn">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      下载原图
+    </button>
+    <button class="btn btn-danger">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+      删除
+    </button>
+  </div>
+</template>
+
+<script>
+// Theme
+let dark = false;
+function toggleTheme() {
+  dark = !dark;
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : '');
+  const icon = document.getElementById('theme-icon');
+  if (dark) {
+    icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  } else {
+    icon.innerHTML = '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>';
+  }
+}
+
+// Placeholder image data (colored rectangles via canvas)
+function makeThumb(hue, text) {
+  const c = document.createElement('canvas');
+  c.width = 200; c.height = 200;
+  const ctx = c.getContext('2d');
+  const g = ctx.createLinearGradient(0,0,200,200);
+  g.addColorStop(0, `hsl(${hue},30%,80%)`);
+  g.addColorStop(1, `hsl(${hue+30},25%,70%)`);
+  ctx.fillStyle = g;
+  ctx.fillRect(0,0,200,200);
+  ctx.fillStyle = `hsl(${hue},20%,40%)`;
+  ctx.font = '13px -apple-system,sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text, 100, 100);
+  return c.toDataURL();
+}
+
+const sampleData = [
+  { name: 'hero-banner.png', size: '2.1 MB', dim: '3840×2160', tags: ['Banner','博客配图'], hue: 220 },
+  { name: 'avatar.jpg', size: '45 KB', dim: '400×400', tags: ['头像'], hue: 160 },
+  { name: 'product-shot.webp', size: '890 KB', dim: '1920×1080', tags: ['产品截图'], hue: 40 },
+  { name: 'icon-set.png', size: '120 KB', dim: '512×512', tags: ['图标'], hue: 280 },
+  { name: 'screenshot.png', size: '560 KB', dim: '1440×900', tags: ['产品截图','博客配图'], hue: 200 },
+  { name: 'logo-dark.svg', size: '8 KB', dim: '240×80', tags: ['图标'], hue: 0 },
+  { name: 'cover-2026.jpg', size: '1.4 MB', dim: '2400×1600', tags: ['Banner'], hue: 30 },
+  { name: 'bg-texture.png', size: '340 KB', dim: '1200×800', tags: ['博客配图'], hue: 100 },
+  { name: 'chart-q1.png', size: '78 KB', dim: '800×500', tags: ['产品截图'], hue: 190 },
+  { name: 'team-photo.jpg', size: '3.2 MB', dim: '4000×3000', tags: ['博客配图'], hue: 340 },
+  { name: 'mockup-v2.png', size: '1.1 MB', dim: '1600×1200', tags: ['产品截图'], hue: 260 },
+  { name: 'favicon.ico', size: '4 KB', dim: '32×32', tags: ['图标'], hue: 60 },
+];
+
+const grid = document.getElementById('image-grid');
+sampleData.forEach((img, i) => {
+  const card = document.createElement('div');
+  card.className = 'image-card';
+  const thumb = makeThumb(img.hue, img.name.split('.')[0]);
+  card.innerHTML = `
+    <div class="card-thumb">
+      <img src="${thumb}" alt="${img.name}" loading="lazy">
+      <div class="card-overlay">
+        <div class="overlay-btn" title="查看详情" onclick="showDetail(${i}); event.stopPropagation()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </div>
+        <div class="overlay-btn" title="复制链接" onclick="event.stopPropagation()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        </div>
+        <div class="overlay-btn" title="删除" onclick="event.stopPropagation()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+        </div>
+      </div>
+    </div>
+    <div class="card-info">
+      <div class="card-name">${img.name}</div>
+      <div class="card-meta">${img.dim} · ${img.size}</div>
+      <div class="card-tags">${img.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+    </div>
+  `;
+  card.addEventListener('click', () => showDetail(i));
+  grid.appendChild(card);
+});
+
+function showDetail(i) {
+  const img = sampleData[i];
+  const panel = document.getElementById('detail-panel');
+  const tpl = document.getElementById('detail-tpl');
+  panel.innerHTML = '';
+  const clone = tpl.content.cloneNode(true);
+  // set image
+  const dpImg = clone.querySelector('#dp-img');
+  dpImg.src = makeThumb(img.hue, img.name.split('.')[0]);
+  dpImg.alt = img.name;
+  // set meta
+  const rows = clone.querySelectorAll('.meta-row span:last-child');
+  rows[0].textContent = img.name;
+  rows[1].textContent = img.dim;
+  rows[2].textContent = img.size;
+  rows[3].textContent = img.name.endsWith('.svg') ? 'SVG (原样)' : img.name.split('.').pop().toUpperCase() + ' → WebP';
+  rows[4].textContent = '2026-04-22';
+  // tags
+  const tagsEl = clone.querySelector('.panel-tags');
+  tagsEl.innerHTML = img.tags.map(t=>`<span class="tag">${t}</span>`).join('') + '<span class="tag" style="border-style:dashed;cursor:pointer">+ 添加</span>';
+  panel.appendChild(clone);
+}
+
+function copyLink(el) {
+  const val = el.querySelector('.link-value').textContent;
+  navigator.clipboard?.writeText(val);
+  const hint = el.querySelector('.copy-hint');
+  hint.textContent = '已复制！';
+  setTimeout(() => hint.textContent = '点击复制', 1500);
+}
+
+function showUpload() {
+  document.getElementById('upload-zone').style.borderColor = 'var(--text)';
+  setTimeout(() => document.getElementById('upload-zone').style.borderColor = '', 600);
+}
+</script>
+</body>
+</html>
