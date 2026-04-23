@@ -223,7 +223,12 @@ func buildImageResponse(img *store.Image, tags []string, links service.Links) fi
 		"mime_type":  img.MimeType,
 		"created_at": img.CreatedAt,
 		"tags":       tags,
-		"links":      links,
+		"url":        links.URL,
+		"webp_url":   links.WebPURL,
+		"thumb_url":  links.ThumbURL,
+		"markdown":   links.Markdown,
+		"html":       links.HTML,
+		"bbcode":     links.BBCode,
 	}
 }
 

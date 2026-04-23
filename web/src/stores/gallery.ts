@@ -12,6 +12,8 @@ export const useGalleryStore = defineStore('gallery', () => {
   const loading = ref(false)
   const tags = ref<TagItem[]>([])
   const selected = ref<ImageItem | null>(null)
+  const lightboxOpen = ref(false)
+  const multiSelected = ref<Set<string>>(new Set())
 
   const totalPages = computed(() => Math.ceil(total.value / limit.value))
 
@@ -41,6 +43,17 @@ export const useGalleryStore = defineStore('gallery', () => {
     images.value = images.value.filter((i) => i.id !== id)
     total.value--
     if (selected.value?.id === id) selected.value = null
+    multiSelected.value.delete(id)
+    await loadTags()
+  }
+
+  async function deleteMultiple(ids: string[]) {
+    await Promise.all(ids.map((id) => api.deleteImage(id)))
+    const idSet = new Set(ids)
+    images.value = images.value.filter((i) => !idSet.has(i.id))
+    total.value -= ids.length
+    if (selected.value && idSet.has(selected.value.id)) selected.value = null
+    ids.forEach((id) => multiSelected.value.delete(id))
     await loadTags()
   }
 
@@ -65,7 +78,7 @@ export const useGalleryStore = defineStore('gallery', () => {
 
   return {
     images, total, page, limit, activeTag, sort, loading,
-    tags, selected, totalPages,
-    loadImages, loadTags, deleteImage, updateTags, setTag, setPage,
+    tags, selected, lightboxOpen, multiSelected, totalPages,
+    loadImages, loadTags, deleteImage, deleteMultiple, updateTags, setTag, setPage,
   }
 })

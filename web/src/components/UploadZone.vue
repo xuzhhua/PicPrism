@@ -43,7 +43,10 @@
       <div v-if="queue.length" class="queue">
         <div v-for="item in queue" :key="item.name" class="queue-item">
           <span class="q-name">{{ item.name }}</span>
-          <span class="q-status" :class="item.status">{{ statusText(item.status) }}</span>
+          <span class="q-status" :class="item.status">
+            {{ statusText(item.status) }}
+            <span v-if="item.errorMsg" class="q-error-msg">: {{ item.errorMsg }}</span>
+          </span>
         </div>
       </div>
 
@@ -77,6 +80,7 @@ interface QueueItem {
   name: string
   file: File
   status: 'pending' | 'uploading' | 'done' | 'error'
+  errorMsg?: string
 }
 
 const queue = ref<QueueItem[]>([])
@@ -110,8 +114,9 @@ async function startUpload() {
     try {
       await api.uploadImage(item.file, tags)
       item.status = 'done'
-    } catch {
+    } catch (err) {
       item.status = 'error'
+      item.errorMsg = err instanceof Error ? err.message : String(err)
     }
   }
   uploading.value = false
@@ -222,6 +227,7 @@ function statusText(s: QueueItem['status']) {
 .q-status.uploading { color: #3b82f6; }
 .q-status.done { color: #22c55e; }
 .q-status.error { color: #ef4444; }
+.q-error-msg { opacity: 0.85; }
 .modal-footer {
   padding: 12px 16px;
   border-top: 1px solid var(--border);

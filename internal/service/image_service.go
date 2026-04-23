@@ -85,9 +85,9 @@ func ProcessUpload(r io.Reader, originalName, dataDir string) (*ProcessResult, e
 			width = bounds.Dx()
 			height = bounds.Dy()
 
-			// 异步生成优化版和缩略图（JPEG 格式）
-			go generateOptimized(img, filepath.Join(dataDir, "images", id+"_opt.jpg"))
-			go generateThumb(img, filepath.Join(dataDir, "thumbs", id+"_thumb.jpg"), 800)
+			// 同步生成优化版和缩略图（JPEG 格式），确保响应返回前文件已就绪
+			generateOptimized(img, filepath.Join(dataDir, "images", id+"_opt.jpg"))
+			generateThumb(img, filepath.Join(dataDir, "thumbs", id+"_thumb.jpg"), 800)
 		}
 	}
 

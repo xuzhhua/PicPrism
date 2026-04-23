@@ -7,8 +7,8 @@
       </button>
     </div>
 
-    <div class="detail-preview">
-      <img :src="img.webp_url || img.url" :alt="img.filename" class="preview-img" />
+    <div class="detail-preview" @click="gallery.lightboxOpen = true">
+      <img :src="img.webp_url || img.url" :alt="img.filename" class="preview-img preview-clickable" />
     </div>
 
     <div class="detail-meta">
@@ -228,6 +228,11 @@ function formatDate(s: string) {
   display: block;
   border-radius: 6px;
 }
+.preview-clickable {
+  cursor: zoom-in;
+  transition: opacity 0.15s;
+}
+.preview-clickable:hover { opacity: 0.85; }
 .detail-meta {
   padding: 12px 16px;
   border-bottom: 1px solid var(--border);

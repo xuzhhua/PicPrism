@@ -17,16 +17,16 @@ func NewFileHandler(dataDir string) *FileHandler {
 }
 
 // Serve GET /i/:filename
-// 支持：<id>.<ext>  |  <id>.webp  |  <id>_thumb.webp
+// 支持：<id>.<ext>  |  <id>_opt.jpg  |  <id>_thumb.jpg
 func (h *FileHandler) Serve(c *fiber.Ctx) error {
 	filename := c.Params("filename")
-	if filename == "" || strings.ContainsAny(filename, "/\\..") {
+	if filename == "" || strings.Contains(filename, "..") || strings.ContainsAny(filename, "/\\") {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid filename"})
 	}
 
 	// 安全检查：防止路径穿越
 	var diskPath string
-	if strings.HasSuffix(filename, "_thumb.webp") {
+	if strings.HasSuffix(filename, "_thumb.jpg") {
 		diskPath = filepath.Join(h.dataDir, "thumbs", filename)
 	} else {
 		diskPath = filepath.Join(h.dataDir, "images", filename)

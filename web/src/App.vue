@@ -6,6 +6,7 @@
     <DetailPanel />
   </div>
   <UploadZone v-if="showUpload" @close="showUpload = false" />
+  <ImageLightbox v-if="gallery.lightboxOpen && gallery.selected" @close="gallery.lightboxOpen = false" />
 </template>
 
 <script setup lang="ts">
@@ -15,6 +16,7 @@ import AppSidebar from './components/AppSidebar.vue'
 import ImageGrid from './components/ImageGrid.vue'
 import DetailPanel from './components/DetailPanel.vue'
 import UploadZone from './components/UploadZone.vue'
+import ImageLightbox from './components/ImageLightbox.vue'
 import { useGalleryStore } from './stores/gallery'
 
 const showUpload = ref(false)
