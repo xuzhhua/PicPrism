@@ -7,6 +7,7 @@
   </div>
   <UploadZone v-if="showUpload" @close="showUpload = false" />
   <ImageLightbox v-if="gallery.lightboxOpen && gallery.selected" @close="gallery.lightboxOpen = false" />
+  <AppToast />
 </template>
 
 <script setup lang="ts">
@@ -17,6 +18,7 @@ import ImageGrid from './components/ImageGrid.vue'
 import DetailPanel from './components/DetailPanel.vue'
 import UploadZone from './components/UploadZone.vue'
 import ImageLightbox from './components/ImageLightbox.vue'
+import AppToast from './components/AppToast.vue'
 import { useGalleryStore } from './stores/gallery'
 
 const showUpload = ref(false)

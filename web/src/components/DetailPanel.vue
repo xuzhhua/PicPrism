@@ -106,8 +106,10 @@
 <script setup lang="ts">
 import { ref, computed, watch, nextTick } from 'vue'
 import { useGalleryStore } from '../stores/gallery'
+import { useToastStore } from '../stores/toast'
 
 const gallery = useGalleryStore()
+const toast = useToastStore()
 const img = computed(() => gallery.selected)
 
 const editTags = ref<string[]>([])
@@ -152,6 +154,12 @@ async function saveTags() {
   saving.value = true
   try {
     await gallery.updateTags(img.value.id, editTags.value)
+  } catch (e: any) {
+    if (e?.status === 401) {
+      toast.push('未授权：请先在右上角配置 API Token')
+    } else {
+      toast.push(e?.message ?? '保存标签失败')
+    }
   } finally {
     saving.value = false
   }
@@ -160,7 +168,15 @@ async function saveTags() {
 async function handleDelete() {
   if (!img.value) return
   if (!confirm(`确定删除 ${img.value.filename}？`)) return
-  await gallery.deleteImage(img.value.id)
+  try {
+    await gallery.deleteImage(img.value.id)
+  } catch (e: any) {
+    if (e?.status === 401) {
+      toast.push('未授权：请先在右上角配置 API Token')
+    } else {
+      toast.push(e?.message ?? '删除失败')
+    }
+  }
 }
 
 function copy(text: string) {

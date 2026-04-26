@@ -49,7 +49,9 @@ async function request<T>(
   const res = await fetch(path, { ...options, headers })
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: res.statusText }))
-    throw new Error(err.error ?? res.statusText)
+    const e = new Error(err.error ?? res.statusText) as Error & { status: number }
+    e.status = res.status
+    throw e
   }
   if (res.status === 204) return undefined as T
   return res.json()
