@@ -1,6 +1,7 @@
 <template>
   <header class="nav">
     <div class="nav-left">
+      <span class="nav-kicker">self-hosted image desk</span>
       <span class="nav-logo">PicPrism</span>
     </div>
     <div class="nav-right">
@@ -66,115 +67,156 @@ function saveToken() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
-  height: 52px;
+  gap: 16px;
+  min-height: 66px;
+  padding: 12px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
   background: var(--bg-panel);
-  border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px);
+}
+.nav-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.nav-kicker {
+  font-size: 11px;
+  line-height: 1.1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-soft);
 }
 .nav-logo {
   font-weight: 700;
-  font-size: 16px;
-  letter-spacing: -0.3px;
+  font-size: 25px;
+  line-height: 0.96;
+  letter-spacing: -0.06em;
   color: var(--text);
 }
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
 }
 .icon-btn {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: var(--radius);
-  border: none;
-  background: transparent;
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  background: var(--bg-soft);
   color: var(--text-muted);
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 .icon-btn:hover {
   background: var(--bg-hover);
+  border-color: var(--border);
   color: var(--text);
 }
+.icon-btn:active {
+  transform: translateY(1px);
+}
 .token-missing {
-  color: #f59e0b;
+  color: var(--danger);
 }
 .token-dot {
   position: absolute;
-  top: 5px;
-  right: 5px;
-  width: 7px;
-  height: 7px;
+  top: 7px;
+  right: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: #ef4444;
-  border: 1.5px solid var(--bg-panel);
+  background: var(--danger);
+  border: 2px solid var(--bg-panel-strong);
 }
 
 /* Token 弹窗 */
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(17, 14, 11, 0.54);
   z-index: 200;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 20px;
 }
 .token-modal {
-  width: 360px;
+  width: min(420px, 100%);
   background: var(--bg-panel);
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 24px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
+  box-shadow: var(--shadow-strong);
+  backdrop-filter: blur(24px);
 }
 .token-modal-title {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
+  letter-spacing: -0.02em;
   color: var(--text);
   margin: 0;
 }
 .token-input {
   width: 100%;
   box-sizing: border-box;
-  padding: 8px 10px;
+  padding: 12px 14px;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--bg);
+  border-radius: 14px;
+  background: var(--bg-soft);
   color: var(--text);
-  font-size: 13px;
+  font-size: 14px;
   outline: none;
 }
-.token-input:focus { border-color: var(--accent); }
+.token-input:focus {
+  border-color: var(--border-strong);
+  box-shadow: var(--focus-ring);
+}
 .token-modal-footer {
   display: flex;
   gap: 8px;
   justify-content: flex-end;
 }
 .token-save-btn {
-  padding: 6px 16px;
-  border-radius: var(--radius);
+  padding: 10px 16px;
+  border-radius: 14px;
   border: none;
   background: var(--accent);
   color: var(--accent-fg);
   font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
 }
 .token-cancel-btn {
-  padding: 6px 16px;
-  border-radius: var(--radius);
+  padding: 10px 16px;
+  border-radius: 14px;
   border: 1px solid var(--border);
-  background: transparent;
+  background: var(--bg-soft);
   color: var(--text);
   font-size: 13px;
   cursor: pointer;
 }
 .token-cancel-btn:hover { background: var(--bg-hover); }
+
+@media (max-width: 920px) {
+  .nav {
+    min-height: 60px;
+    padding: 10px 14px;
+    border-radius: 22px;
+  }
+
+  .nav-logo {
+    font-size: 22px;
+  }
+}
 </style>

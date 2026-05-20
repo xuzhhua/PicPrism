@@ -1,9 +1,12 @@
 <template>
-  <AppNav @upload="showUpload = true" />
-  <div class="layout">
-    <AppSidebar />
-    <ImageGrid />
-    <DetailPanel />
+  <a class="skip-link" href="#main-content">跳到内容</a>
+  <div class="app-shell">
+    <AppNav @upload="showUpload = true" />
+    <main id="main-content" class="layout">
+      <AppSidebar class="app-sidebar" />
+      <ImageGrid class="app-gallery" />
+      <DetailPanel class="app-detail" />
+    </main>
   </div>
   <UploadZone v-if="showUpload" @close="showUpload = false" />
   <ImageLightbox v-if="gallery.lightboxOpen && gallery.selected" @close="gallery.lightboxOpen = false" />
@@ -31,9 +34,56 @@ onMounted(() => {
 </script>
 
 <style>
+.app-shell {
+  min-height: 100dvh;
+  padding: 18px;
+}
+
 .layout {
-  display: flex;
-  height: calc(100vh - 52px);
-  overflow: hidden;
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr) minmax(290px, 340px);
+  grid-template-areas: "sidebar gallery detail";
+  gap: 18px;
+  min-height: calc(100dvh - 102px);
+  padding-top: 18px;
+  align-items: start;
+}
+
+.app-sidebar {
+  grid-area: sidebar;
+}
+
+.app-gallery {
+  grid-area: gallery;
+}
+
+.app-detail {
+  grid-area: detail;
+}
+
+@media (max-width: 1180px) {
+  .layout {
+    grid-template-columns: 208px minmax(0, 1fr);
+    grid-template-areas:
+      "sidebar gallery"
+      "detail detail";
+  }
+}
+
+@media (max-width: 920px) {
+  .app-shell {
+    padding: 12px;
+  }
+
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "gallery"
+      "detail"
+      "sidebar";
+    gap: 14px;
+    min-height: auto;
+    padding-top: 14px;
+  }
 }
 </style>
